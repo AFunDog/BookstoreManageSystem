@@ -1,0 +1,326 @@
+<UserControl
+    x:Class="BookstoreManageSystem.Avalonia.EmployeeMainView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cs="using:BookstoreManageSystem.Core.Structs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:g="using:System.Globalization"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:BookstoreManageSystem.Avalonia.ViewModels"
+    d:DesignHeight="600"
+    d:DesignWidth="1000"
+    x:DataType="vm:EmployeeMainViewModel"
+    mc:Ignorable="d">
+    <Design.DataContext>
+        <vm:EmployeeMainViewModel>
+            <vm:EmployeeMainViewModel.BookDatas>
+                <cs:BookData
+                    Author="Authro"
+                    BookName="BookName"
+                    ISBN="ISBN"
+                    Introduction="Introduction"
+                    Publisher="Publisher" />
+                <cs:BookData />
+                <cs:BookData />
+                <cs:BookData />
+            </vm:EmployeeMainViewModel.BookDatas>
+            <vm:EmployeeMainViewModel.StoreDatas>
+                <cs:StoreData Amount="13" ISBN="1234567890123" />
+                <cs:StoreData Amount="26" ISBN="1234567890123" />
+                <cs:StoreData Amount="843278" ISBN="1234567890123" />
+                <cs:StoreData Amount="843278" ISBN="1234567890123" />
+                <cs:StoreData Amount="843278" ISBN="1234567890123" />
+                <cs:StoreData Amount="843278" ISBN="1234567890123" />
+                <cs:StoreData Amount="843278" ISBN="1234567890123" />
+                <cs:StoreData Amount="843278" ISBN="1234567890123" />
+                <cs:StoreData Amount="843278" ISBN="1234567890123" />
+                <cs:StoreData Amount="843278" ISBN="1234567890123" />
+                <cs:StoreData Amount="843278" ISBN="1234567890123" />
+                <cs:StoreData Amount="843278" ISBN="1234567890123" />
+                <cs:StoreData Amount="843278" ISBN="1234567890123" />
+                <cs:StoreData Amount="843278" ISBN="1234567890123" />
+                <cs:StoreData Amount="843278" ISBN="1234567890123" />
+                <cs:StoreData Amount="843278" ISBN="1234567890123" />
+                <cs:StoreData Amount="843278" ISBN="1234567890123" />
+                <cs:StoreData Amount="843278" ISBN="1234567890123" />
+            </vm:EmployeeMainViewModel.StoreDatas>
+            <vm:EmployeeMainViewModel.GoodsDatas>
+                <cs:GoodsData ISBN="1234567890123" />
+                <cs:GoodsData ISBN="1234567890123" />
+                <cs:GoodsData ISBN="1234567890123" />
+            </vm:EmployeeMainViewModel.GoodsDatas>
+            <vm:EmployeeMainViewModel.PurchaseDealDatas>
+                <cs:PurchaseDealData />
+                <cs:PurchaseDealData />
+                <cs:PurchaseDealData />
+            </vm:EmployeeMainViewModel.PurchaseDealDatas>
+            <vm:EmployeeMainViewModel.SellDealDatas>
+                <cs:SellDealData />
+                <cs:SellDealData />
+                <cs:SellDealData />
+            </vm:EmployeeMainViewModel.SellDealDatas>
+        </vm:EmployeeMainViewModel>
+    </Design.DataContext>
+    <UserControl.Resources>
+        <ContextMenu x:Key="AddGoodsContextMenu">
+            <StackPanel Orientation="Horizontal" Spacing="4">
+                <TextBlock VerticalAlignment="Center" Text="数量" />
+                <NumericUpDown
+                    Name="AmountBox"
+                    MinWidth="128"
+                    Increment="1"
+                    Maximum="{Binding $parent[ScrollViewer].((vm:EmployeeMainViewModel)DataContext).SelectedStoreData.Amount, Mode=OneWay}"
+                    Minimum="0"
+                    Value="{Binding $parent[ScrollViewer].((vm:EmployeeMainViewModel)DataContext).AddAmount, Mode=TwoWay}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="4">
+                <TextBlock VerticalAlignment="Center" Text="价格" />
+                <NumericUpDown
+                    Name="PriceBox"
+                    MinWidth="128"
+                    FormatString="0.00"
+                    Increment="1"
+                    Minimum="0.00"
+                    Value="{Binding $parent[ScrollViewer].((vm:EmployeeMainViewModel)DataContext).AddPrice, Mode=TwoWay}">
+                    <NumericUpDown.NumberFormat>
+                        <g:NumberFormatInfo NumberDecimalDigits="2" />
+                    </NumericUpDown.NumberFormat>
+                </NumericUpDown>
+            </StackPanel>
+            <MenuItem
+                Name="AddGoodsMenuItem"
+                Click="AddGoodsMenuItem_Click"
+                Header="上架商品" />
+        </ContextMenu>
+        <Flyout x:Key="PurchaseBookFlyout">
+            <StackPanel Orientation="Vertical" Spacing="8">
+                <StackPanel
+                    HorizontalAlignment="Stretch"
+                    Orientation="Horizontal"
+                    Spacing="4">
+                    <TextBlock VerticalAlignment="Center" Text="ISBN" />
+                    <TextBox
+                        MinWidth="124"
+                        HorizontalAlignment="Stretch"
+                        Text="{Binding PurchaseISBN, Mode=TwoWay}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <TextBlock VerticalAlignment="Center" Text="数量" />
+                    <NumericUpDown
+                        Name="PurchaseAmountBox"
+                        MinWidth="128"
+                        Increment="1"
+                        Minimum="0"
+                        Value="{Binding PurchaseAmount, Mode=TwoWay}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <TextBlock VerticalAlignment="Center" Text="价格" />
+                    <NumericUpDown
+                        Name="PurchasePriceBox"
+                        MinWidth="128"
+                        FormatString="0.00"
+                        Increment="1"
+                        Minimum="0.00"
+                        Value="{Binding PurchasePrice, Mode=TwoWay}">
+                        <NumericUpDown.NumberFormat>
+                            <g:NumberFormatInfo NumberDecimalDigits="2" />
+                        </NumericUpDown.NumberFormat>
+                    </NumericUpDown>
+                </StackPanel>
+                <Button Command="{Binding PurchaseBooksCommand}" Content="确认" />
+            </StackPanel>
+        </Flyout>
+        <Flyout x:Key="EditBookDataFlyout">
+            <StackPanel
+                Width="196"
+                Orientation="Vertical"
+                Spacing="8">
+                <TextBlock Text="ISBN" />
+                <TextBox Text="{Binding RegisterISBN, Mode=TwoWay}" />
+                <TextBlock Text="书籍名称" />
+                <TextBox Text="{Binding RegisterBookName, Mode=TwoWay}" />
+                <TextBlock Text="作者" />
+                <TextBox Text="{Binding RegisterAuthor, Mode=TwoWay}" />
+                <TextBlock Text="出版社" />
+                <TextBox Text="{Binding RegisterPublisher, Mode=TwoWay}" />
+                <TextBlock Text="介绍" />
+                <TextBox Text="{Binding RegisterIntroduction, Mode=TwoWay}" />
+                <Button Command="{Binding AddBookCommand}" Content="注册书籍" />
+            </StackPanel>
+        </Flyout>
+    </UserControl.Resources>
+    <UserControl.Styles>
+        <Style Selector="Border.StoreDataCard">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Opacity="0.2" Color="Black" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Transitions">
+                <Setter.Value>
+                    <Transitions>
+                        <BrushTransition Property="Background" Duration="0:0:0.083" />
+                    </Transitions>
+                </Setter.Value>
+            </Setter>
+            <Style Selector="^:pointerover">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Opacity="0.2" Color="DarkGray" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Style>
+    </UserControl.Styles>
+    <Grid
+        Margin="16"
+        ColumnDefinitions="*,*,*"
+        RowDefinitions="auto,*,auto,*,auto">
+        <TextBlock>
+            <Run FontSize="24" Text="书籍列表" />
+        </TextBlock>
+        <ScrollViewer
+            Grid.Row="1"
+            Grid.RowSpan="3"
+            Grid.Column="0"
+            HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl
+                Margin="0,0,8,0"
+                ItemTemplate="{StaticResource BookDataTemplate}"
+                ItemsSource="{Binding BookDatas}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel
+                            Margin="8"
+                            Orientation="Vertical"
+                            Spacing="8" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="1"
+            Margin="0,0,0,4">
+            <Run FontSize="24" Text="库存列表" />
+            <LineBreak />
+            <Run FontSize="20" Text="ISBN - 剩余数量" />
+        </TextBlock>
+        <ScrollViewer
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="4"
+            HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl Margin="0,0,16,0" ItemsSource="{Binding StoreDatas}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Spacing="4" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="cs:StoreData">
+                        <Border
+                            Padding="4"
+                            Classes="StoreDataCard"
+                            ContextMenu="{StaticResource AddGoodsContextMenu}"
+                            CornerRadius="4"
+                            PointerPressed="StoreDataCard_PointerPressed">
+                            <TextBlock>
+                                <Run FontWeight="Bold" Text="{Binding ISBN}" />
+                                <Run Text=" - " />
+                                <Run FontWeight="Bold" Text="{Binding Amount}">
+                                    <!--<Run.Foreground>
+                                        <SolidColorBrush Opacity="0.8" Color="DarkOrange" />
+                                    </Run.Foreground>-->
+                                </Run>
+                            </TextBlock>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        <TextBlock Grid.Row="2" Grid.Column="1">
+            <Run FontSize="24" Text="已上架的商品列表" />
+            <LineBreak />
+            <Run FontSize="20" Text="ISBN - 数量" />
+        </TextBlock>
+        <ScrollViewer
+            Grid.Row="3"
+            Grid.Column="1"
+            Margin="4"
+            HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl Margin="0,0,16,0" ItemsSource="{Binding GoodsDatas}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Spacing="4" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="cs:GoodsData">
+                        <Border
+                            Padding="4"
+                            Classes="StoreDataCard"
+                            CornerRadius="4"
+                            PointerPressed="StoreDataCard_PointerPressed">
+                            <TextBlock>
+                                <Run FontWeight="Bold" Text="{Binding ISBN}" />
+                                <Run Text=" - " />
+                                <Run FontWeight="Bold" Text="{Binding Amount}">
+                                    <!--<Run.Foreground>
+                                        <SolidColorBrush Opacity="0.8" Color="DarkOrange" />
+                                    </Run.Foreground>-->
+                                </Run>
+                            </TextBlock>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="2"
+            FontSize="24"
+            Text="采购交易记录" />
+        <ScrollViewer Grid.Row="1" Grid.Column="2">
+            <ItemsControl ItemTemplate="{StaticResource PurchaseDealDataTemplate}" ItemsSource="{Binding PurchaseDealDatas}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Spacing="4" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+        <TextBlock
+            Grid.Row="2"
+            Grid.Column="2"
+            FontSize="24"
+            Text="售出交易记录" />
+        <ScrollViewer Grid.Row="3" Grid.Column="2">
+            <ItemsControl ItemTemplate="{StaticResource SellDealDataTemplate}" ItemsSource="{Binding SellDealDatas}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Spacing="4" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+        <StackPanel
+            Grid.Row="4"
+            Grid.Column="0"
+            Margin="4"
+            Orientation="Horizontal"
+            Spacing="4">
+            <Button
+                Name="registerBookButton"
+                Click="RegisterBookButton_Click"
+                Content="注册书籍"
+                ContextFlyout="{StaticResource EditBookDataFlyout}" />
+            <Button
+                Name="purchaseBooksButton"
+                Click="PurchaseBooksButton_Click"
+                Content="进货"
+                ContextFlyout="{StaticResource PurchaseBookFlyout}" />
+        </StackPanel>
+
+    </Grid>
+</UserControl>

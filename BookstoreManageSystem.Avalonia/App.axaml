@@ -1,0 +1,161 @@
+<Application
+    x:Class="BookstoreManageSystem.Avalonia.App"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cs="using:BookstoreManageSystem.Core.Structs"
+    xmlns:sukiUi="using:SukiUI"
+    xmlns:sukicontrols="using:SukiUI.Controls"
+    RequestedThemeVariant="Default">
+    <!--  "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options.  -->
+
+    <Application.Styles>
+        <!--<FluentTheme />-->
+        <sukiUi:SukiTheme />
+
+        <Style Selector="sukicontrols|SukiWindow">
+            <Setter Property="BackgroundAnimationEnabled" Value="True" />
+            <Setter Property="BackgroundStyle" Value="Bubble" />
+            <Setter Property="BackgroundTransitionsEnabled" Value="True" />
+        </Style>
+
+        <Style Selector="Border.Card">
+            <Setter Property="Transitions">
+                <Setter.Value>
+                    <Transitions>
+                        <BrushTransition Property="Background" Duration="0:0:0.083" />
+                    </Transitions>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Opacity="0.2" Color="Black" />
+                </Setter.Value>
+            </Setter>
+            <Style Selector="^:pointerover">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Opacity="0.2" Color="DarkGray" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Style>
+
+        <Style Selector="Run.Icons">
+            <Setter Property="FontFamily" Value="Segoe Fluent Icons" />
+            <Setter Property="BaselineAlignment" Value="Center" />
+        </Style>
+        <Style Selector="TextBlock.Icons">
+            <Setter Property="FontFamily" Value="Segoe Fluent Icons" />
+        </Style>
+
+    </Application.Styles>
+
+
+    <Application.Resources>
+        <DataTemplate x:Key="BookDataTemplate" DataType="cs:BookData">
+            <sukicontrols:GlassCard Classes="Primary" CornerRadius="8">
+                <sukicontrols:GlassCard.ContextFlyout>
+                    <Flyout>
+                        <sukicontrols:GlassCard IsOpaque="True">
+
+                            <StackPanel Width="208" Spacing="8">
+                                <TextBlock Text="修改或删除书籍数据" />
+                                <TextBox
+                                    Background="Transparent"
+                                    BorderBrush="Transparent"
+                                    IsReadOnly="True"
+                                    Text="{Binding ISBN}" />
+                                <TextBlock Text="书籍名称" />
+                                <TextBox Text="{Binding BookName, Mode=TwoWay}" />
+                                <TextBlock Text="作者" />
+                                <TextBox Text="{Binding Author, Mode=TwoWay}" />
+                                <TextBlock Text="出版社" />
+                                <TextBox Text="{Binding Publisher, Mode=TwoWay}" />
+                                <TextBlock Text="介绍" />
+                                <TextBox Text="{Binding Introduction, Mode=TwoWay}" />
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <Button Click="ConfirmEditButton_Click" Content="确认修改" />
+                                    <Button
+                                        Click="DeleteButton_Click"
+                                        Content="删除书籍"
+                                        Foreground="Red" />
+                                </StackPanel>
+                            </StackPanel>
+                        </sukicontrols:GlassCard>
+                    </Flyout>
+                </sukicontrols:GlassCard.ContextFlyout>
+
+                <Border ClipToBounds="True" CornerRadius="8">
+                    <Grid ColumnDefinitions="1*,2*">
+                        <Image
+                            ClipToBounds="True"
+                            Source="avares://BookstoreManageSystem.Avalonia/Assets/LoginPic.png"
+                            Stretch="UniformToFill" />
+                        <StackPanel
+                            Grid.Column="1"
+                            Margin="8"
+                            Orientation="Vertical"
+                            Spacing="8">
+                            <TextBlock FontSize="20" Text="{Binding BookName}" />
+                            <TextBlock FontStyle="Italic" Text="{Binding ISBN}" />
+                            <TextBlock Text="{Binding Author}" />
+                            <TextBlock Text="{Binding Publisher}" />
+                            <TextBlock Text="{Binding Introduction}" />
+                        </StackPanel>
+                    </Grid>
+
+                </Border>
+            </sukicontrols:GlassCard>
+        </DataTemplate>
+
+        <DataTemplate x:Key="SellDealDataTemplate" DataType="cs:SellDealData">
+            <sukicontrols:GlassCard
+                Padding="4"
+                Classes="Accent"
+                CornerRadius="4"
+                IsInteractive="True">
+                <TextBlock>
+                    <Run Text="购买编号" />
+                    <Run Text="{Binding DealID}" />
+                    <LineBreak />
+                    <Run Text="ISBN" />
+                    <Run Text="{Binding ISBN}" />
+                    <LineBreak />
+                    <Run Text="购买数量" />
+                    <Run Text="{Binding DealAmount}" />
+                    <LineBreak />
+                    <Run Text="购买单价" />
+                    <Run Text="{Binding DealPrice}" />
+                    <LineBreak />
+                    <Run Text="购买时间" />
+                    <Run Text="{Binding DealDate, StringFormat='{}{0:yyyy-MM-dd}'}" />
+                </TextBlock>
+            </sukicontrols:GlassCard>
+        </DataTemplate>
+
+        <DataTemplate x:Key="PurchaseDealDataTemplate" DataType="cs:PurchaseDealData">
+            <sukicontrols:GlassCard
+                Padding="4"
+                Classes="Primary"
+                CornerRadius="4"
+                IsInteractive="True">
+                <TextBlock>
+                    <Run Text="采购编号" />
+                    <Run Text="{Binding DealID}" />
+                    <LineBreak />
+                    <Run Text="ISBN" />
+                    <Run Text="{Binding ISBN}" />
+                    <LineBreak />
+                    <Run Text="采购数量" />
+                    <Run Text="{Binding DealAmount}" />
+                    <LineBreak />
+                    <Run Text="采购单价" />
+                    <Run Text="{Binding DealPrice}" />
+                    <LineBreak />
+                    <Run Text="采购时间" />
+                    <Run Text="{Binding DealDate, StringFormat='{}{0:yyyy-MM-dd}'}" />
+                </TextBlock>
+            </sukicontrols:GlassCard>
+        </DataTemplate>
+    </Application.Resources>
+</Application>

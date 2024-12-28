@@ -1,0 +1,57 @@
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:BookstoreManageSystem.Avalonia.Controls">
+
+    <!--
+        Additional resources
+        Using Control Themes:
+        https://docs.avaloniaui.net/docs/basics/user-interface/styling/control-themes
+        Using Theme Variants:
+        https://docs.avaloniaui.net/docs/guides/styles-and-resources/how-to-use-theme-variants
+    -->
+
+    <Design.PreviewWith>
+        <Grid
+            Width="600"
+            Height="320"
+            RowDefinitions="auto,*">
+            <controls:CustomTitleBar
+                Title="这是标题"
+                Grid.Row="0"
+                Background="Aqua" />
+            <TextBlock
+                Grid.Row="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Text="Content..." />
+        </Grid>
+    </Design.PreviewWith>
+
+    <ControlTheme x:Key="{x:Type controls:CustomTitleBar}" TargetType="controls:CustomTitleBar">
+
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid Background="{TemplateBinding Background}" ColumnDefinitions="*,auto,auto,auto">
+                    <TextBlock
+                        Name="PART_Title"
+                        Grid.Column="0"
+                        Text="{TemplateBinding Title}" />
+                    <!--<Button Grid.Column="1" Content="-" />-->
+                    <!--<Button Grid.Column="2" Content="o" />-->
+                    <Button
+                        Name="PART_CloseButton"
+                        Grid.Column="3"
+                        Content="X" />
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ TextBlock#PART_Title">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="8,0,0,0" />
+        </Style>
+        <Style Selector="^ /template/ Button#PART_CloseButton">
+            <Setter Property="Margin" Value="4" />
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>

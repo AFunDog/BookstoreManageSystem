@@ -1,0 +1,177 @@
+<sukiUI:SukiWindow
+    x:Class="BookstoreManageSystem.Avalonia.LoginWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sukiUI="using:SukiUI.Controls"
+    xmlns:vm="using:BookstoreManageSystem.Avalonia.ViewModels"
+    Title="登录界面"
+    Width="800"
+    Height="450"
+    x:DataType="vm:LoginWindowViewModel"
+    TransparencyLevelHint="AcrylicBlur"
+    mc:Ignorable="d">
+    <sukiUI:SukiWindow.Hosts>
+        <sukiUI:SukiToastHost Name="toastHost" />
+    </sukiUI:SukiWindow.Hosts>
+    <!--<Design.DesignStyle>
+        <Style Selector="Window">
+            <Setter Property="RequestedThemeVariant" Value="Dark" />
+        </Style>
+    </Design.DesignStyle>-->
+    <sukiUI:SukiWindow.Styles>
+        <Style Selector="Image#LoginPic">
+            <Setter Property="Stretch" Value="UniformToFill" />
+            <Setter Property="Opacity" Value="0.9" />
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="Width" Value="144" />
+        </Style>
+        <Style Selector="StackPanel.InputPanel">
+            <Style Selector="^ TextBlock.BoxLabel">
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Width" Value="128" />
+                <Setter Property="Margin" Value="0,0,8,0" />
+                <Setter Property="TextAlignment" Value="End" />
+            </Style>
+            <Style Selector="^ Button">
+                <Setter Property="Margin" Value="4" />
+            </Style>
+        </Style>
+    </sukiUI:SukiWindow.Styles>
+
+
+    <Grid>
+        <!--<ExperimentalAcrylicBorder>
+            <ExperimentalAcrylicBorder.Material>
+                <ExperimentalAcrylicMaterial
+                    MaterialOpacity="0.65"
+                    TintColor="Black"
+                    TintOpacity="1" />
+            </ExperimentalAcrylicBorder.Material>
+        </ExperimentalAcrylicBorder>-->
+
+        <Grid ColumnDefinitions="1*,2*">
+            <Image Name="LoginPic" Source="avares://BookstoreManageSystem.Avalonia/Assets/LoginPic.png" />
+            <Grid Grid.Column="1">
+                <TabControl Name="loginTablControl" SelectedIndex="0">
+                    <TabItem Header="用户登录">
+                        <StackPanel
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Classes="InputPanel"
+                            Spacing="8">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Classes="BoxLabel" Text="用户名/邮箱/手机号" />
+                                <TextBox Text="{Binding UserName, Mode=TwoWay}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Classes="BoxLabel" Text="密码" />
+                                <TextBox PasswordChar="*" Text="{Binding Password, Mode=TwoWay}" />
+                            </StackPanel>
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                <Button
+                                    Classes="Flat"
+                                    Command="{Binding LoginAsCustomerCommand}"
+                                    Content="登录" />
+                                <Button Click="RegisterButton_Click" Content="注册" />
+                            </StackPanel>
+                        </StackPanel>
+                    </TabItem>
+                    <TabItem Header="员工登录">
+                        <StackPanel
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Classes="InputPanel"
+                            Spacing="8">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Classes="BoxLabel" Text="员工账户" />
+                                <TextBox Text="{Binding UserName, Mode=TwoWay}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Classes="BoxLabel" Text="密码" />
+                                <TextBox PasswordChar="*" Text="{Binding Password, Mode=TwoWay}" />
+                            </StackPanel>
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                <Button Command="{Binding LoginAsEmployeeCommand}" Content="登录" />
+                            </StackPanel>
+                        </StackPanel>
+                    </TabItem>
+                    <TabItem Header="游客访问">
+                        <StackPanel
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Classes="InputPanel"
+                            Spacing="8">
+                            <TextBlock>
+                                <Run Text="以游客方式访问商店" />
+                                <LineBreak />
+                                <Run Text="游客不允许直接购买商品，只能查看" />
+                            </TextBlock>
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                <Button Command="{Binding LoginAsVisitorCommand}" Content="以游客方式访问" />
+                            </StackPanel>
+                        </StackPanel>
+                    </TabItem>
+                    <TabItem Header="管理员登录">
+                        <StackPanel
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Classes="InputPanel"
+                            Spacing="8">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Classes="BoxLabel" Text="管理员密码" />
+                                <TextBox PasswordChar="*" Text="{Binding Password, Mode=TwoWay}" />
+                            </StackPanel>
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                <Button Command="{Binding LoginAsOwnerCommand}" Content="管理员登录" />
+                            </StackPanel>
+                        </StackPanel>
+                    </TabItem>
+                    <TabItem Header="">
+                        <StackPanel
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Classes="InputPanel"
+                            Spacing="8">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Classes="BoxLabel" Text="姓名" />
+                                <TextBox Text="{Binding RegisterUserName}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Classes="BoxLabel" Text="地址" />
+                                <TextBox Text="{Binding RegisterAddress}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Classes="BoxLabel" Text="手机号" />
+                                <TextBox Text="{Binding RegisterPhone}" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Classes="BoxLabel" Text="邮箱" />
+                                <TextBox Text="{Binding RegisterEmail}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Classes="BoxLabel" Text="密码" />
+                                <TextBox PasswordChar="*" Text="{Binding RegisterPassword}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Button
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding RegisterCustomerAccountCommand}"
+                                    Content="注册账号" />
+                                <TextBlock VerticalAlignment="Center">
+                                    <Run Text="注册账号ID:" />
+                                    <Run Text="{Binding RegisterUID}" />
+                                </TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </TabItem>
+                </TabControl>
+
+            </Grid>
+        </Grid>
+    </Grid>
+</sukiUI:SukiWindow>

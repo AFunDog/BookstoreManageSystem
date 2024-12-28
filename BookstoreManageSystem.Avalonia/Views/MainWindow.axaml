@@ -1,0 +1,29 @@
+<sukiUI:SukiWindow
+    x:Class="BookstoreManageSystem.Avalonia.Views.MainWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sukiUI="using:SukiUI.Controls"
+    xmlns:v="using:BookstoreManageSystem.Avalonia.Views"
+    xmlns:vm="using:BookstoreManageSystem.Avalonia.ViewModels"
+    Title="{Binding WindowTitle}"
+    Width="1280"
+    Height="720"
+    x:DataType="vm:MainWindowViewModel"
+    mc:Ignorable="d">
+    <sukiUI:SukiWindow.Hosts>
+        <sukiUI:SukiToastHost Name="toastHost" />
+    </sukiUI:SukiWindow.Hosts>
+    <Grid>
+        <!--<ExperimentalAcrylicBorder>
+            <ExperimentalAcrylicBorder.Material>
+                <ExperimentalAcrylicMaterial
+                    MaterialOpacity="0.65"
+                    TintColor="Black"
+                    TintOpacity="1" />
+            </ExperimentalAcrylicBorder.Material>
+        </ExperimentalAcrylicBorder>-->
+        <ContentPresenter Name="mainWindowContentPresenter" Content="{Binding WindowContent, Mode=OneWay}" />
+    </Grid>
+</sukiUI:SukiWindow>

@@ -1,0 +1,293 @@
+<UserControl
+    x:Class="BookstoreManageSystem.Avalonia.OwnerMainView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cs="using:BookstoreManageSystem.Core.Structs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sukiUI="using:SukiUI.Controls"
+    xmlns:vm="using:BookstoreManageSystem.Avalonia.ViewModels"
+    d:DesignHeight="600"
+    d:DesignWidth="1200"
+    x:DataType="vm:OwnerMainViewModel"
+    mc:Ignorable="d">
+    <Design.DesignStyle />
+    <Design.DataContext>
+        <vm:OwnerMainViewModel>
+            <vm:OwnerMainViewModel.BookDatas>
+                <cs:BookData
+                    Author="Author"
+                    BookName="BookName"
+                    ISBN="ISBN"
+                    Introduction="Introduction"
+                    Publisher="Publisher" />
+                <cs:BookData />
+                <cs:BookData />
+            </vm:OwnerMainViewModel.BookDatas>
+            <vm:OwnerMainViewModel.CustomerDatas>
+                <cs:CustomerData Name="zk" UID="1" />
+                <cs:CustomerData Name="zyx" UID="2" />
+                <cs:CustomerData Name="lwk" UID="3" />
+            </vm:OwnerMainViewModel.CustomerDatas>
+            <vm:OwnerMainViewModel.EmployeeDatas>
+                <cs:EmployeeData />
+                <cs:EmployeeData />
+                <cs:EmployeeData />
+            </vm:OwnerMainViewModel.EmployeeDatas>
+            <vm:OwnerMainViewModel.PurchaseDealDatas>
+                <cs:PurchaseDealData />
+                <cs:PurchaseDealData />
+                <cs:PurchaseDealData />
+            </vm:OwnerMainViewModel.PurchaseDealDatas>
+            <vm:OwnerMainViewModel.SellDealDatas>
+                <cs:SellDealData />
+                <cs:SellDealData />
+                <cs:SellDealData />
+            </vm:OwnerMainViewModel.SellDealDatas>
+        </vm:OwnerMainViewModel>
+    </Design.DataContext>
+    <UserControl.Styles>
+        <Style Selector="TextBlock.ListLabel">
+            <Setter Property="Margin" Value="8,4" />
+            <Setter Property="FontSize" Value="16" />
+        </Style>
+    </UserControl.Styles>
+    <Grid
+        Margin="16"
+        ColumnDefinitions="*,*,*"
+        RowDefinitions="auto,auto,*,auto,*">
+        <TextBlock FontSize="24" Text="管理员仪表盘" />
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="0"
+            Classes="ListLabel"
+            Text="书籍列表" />
+        <ScrollViewer
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="8">
+            <ItemsControl
+                Name="BookDataList"
+                Padding="0,0,16,0"
+                ItemTemplate="{StaticResource BookDataTemplate}"
+                ItemsSource="{Binding BookDatas}">
+                <ItemsControl.Background>
+                    <SolidColorBrush Opacity="0.2" Color="Black" />
+                </ItemsControl.Background>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel
+                            Margin="8"
+                            Orientation="Vertical"
+                            Spacing="8" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="1"
+            Classes="ListLabel"
+            Text="用户列表" />
+        <ScrollViewer
+            Grid.Row="2"
+            Grid.Column="1"
+            Margin="8">
+            <ItemsControl
+                Name="CustomerDataList"
+                Padding="0,0,16,0"
+                ItemsSource="{Binding CustomerDatas}">
+                <ItemsControl.Background>
+                    <SolidColorBrush Opacity="0.2" Color="Black" />
+                </ItemsControl.Background>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel
+                            Margin="8"
+                            Orientation="Vertical"
+                            Spacing="8" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="cs:CustomerData">
+                        <sukiUI:GlassCard
+                            Padding="4"
+                            Classes="Accent"
+                            CornerRadius="4">
+                            <TextBlock>
+                                <Run Text="UID" />
+                                <Run Text="{Binding UID}" />
+                                <LineBreak />
+                                <Run Text="Name" />
+                                <Run Text="{Binding Name}" />
+                            </TextBlock>
+                        </sukiUI:GlassCard>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="2"
+            Classes="ListLabel"
+            Text="员工列表" />
+        <ScrollViewer
+            Grid.Row="2"
+            Grid.Column="2"
+            Margin="8">
+            <ItemsControl
+                Name="EmployeeDataList"
+                Padding="0,0,16,0"
+                ItemsSource="{Binding EmployeeDatas}">
+                <ItemsControl.Background>
+                    <SolidColorBrush Opacity="0.2" Color="Black" />
+                </ItemsControl.Background>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel
+                            Margin="8"
+                            Orientation="Vertical"
+                            Spacing="8" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="cs:EmployeeData">
+                        <sukiUI:GlassCard
+                            Padding="4"
+                            Classes="Accent"
+                            CornerRadius="4">
+                            <TextBlock>
+                                <Run Text="EID" />
+                                <Run Text="{Binding EmployeeID}" />
+                                <LineBreak />
+                                <Run Text="Name" />
+                                <Run Text="{Binding Name}" />
+                            </TextBlock>
+                        </sukiUI:GlassCard>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        <TextBlock
+            Grid.Row="3"
+            Grid.Column="0"
+            Classes="ListLabel"
+            Text="采购交易记录" />
+        <ScrollViewer
+            Grid.Row="4"
+            Grid.Column="0"
+            Margin="8">
+            <ItemsControl
+                Name="PurchaseDealDataList"
+                Padding="0,0,16,0"
+                ItemTemplate="{StaticResource PurchaseDealDataTemplate}"
+                ItemsSource="{Binding PurchaseDealDatas}">
+                <ItemsControl.Background>
+                    <SolidColorBrush Opacity="0.2" Color="Black" />
+                </ItemsControl.Background>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel
+                            Margin="8"
+                            Orientation="Vertical"
+                            Spacing="8" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate />
+            </ItemsControl>
+        </ScrollViewer>
+        <TextBlock
+            Grid.Row="3"
+            Grid.Column="1"
+            Classes="ListLabel"
+            Text="售出交易记录" />
+        <ScrollViewer
+            Grid.Row="4"
+            Grid.Column="1"
+            Margin="8">
+            <ItemsControl
+                Name="SellDeaDatalList"
+                Padding="0,0,16,0"
+                ItemTemplate="{StaticResource SellDealDataTemplate}"
+                ItemsSource="{Binding SellDealDatas}">
+                <ItemsControl.Background>
+                    <SolidColorBrush Opacity="0.2" Color="Black" />
+                </ItemsControl.Background>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel
+                            Margin="8"
+                            Orientation="Vertical"
+                            Spacing="8" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+        <TextBlock
+            Grid.Row="3"
+            Grid.Column="2"
+            Classes="ListLabel"
+            Text="注册员工" />
+        <Grid
+            Grid.Row="4"
+            Grid.Column="2"
+            Margin="8"
+            ColumnDefinitions="auto,*"
+            RowDefinitions="*,*,*,*">
+
+            <Grid.Styles>
+                <Style Selector="TextBlock">
+                    <Setter Property="Margin" Value="8" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                </Style>
+                <Style />
+                <Style Selector="TextBox">
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                </Style>
+            </Grid.Styles>
+
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Text="员工名称" />
+            <TextBox
+                Grid.Row="0"
+                Grid.Column="1"
+                Text="{Binding RegisterEmployeeName, Mode=TwoWay}" />
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="0"
+                Text="员工月薪" />
+            <NumericUpDown
+                Grid.Row="1"
+                Grid.Column="1"
+                FormatString="0.00"
+                Increment="100"
+                Minimum="0"
+                Value="{Binding RegisterEmployeeSalary, Mode=TwoWay}" />
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="0"
+                Text="账号密码" />
+            <TextBox
+                Grid.Row="2"
+                Grid.Column="1"
+                PasswordChar="*"
+                Text="{Binding RegisterEmployeePassword, Mode=TwoWay}" />
+            <Button
+                Grid.Row="3"
+                Grid.Column="0"
+                Command="{Binding RegisterEmployeeCommand}"
+                Content="注册账号" />
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="1"
+                IsVisible="{Binding Registered}">
+                <Run Text="注册账号ID:" />
+                <Run Text="{Binding RegisterEmplyeeID}" />
+            </TextBlock>
+        </Grid>
+    </Grid>
+</UserControl>

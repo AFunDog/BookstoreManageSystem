@@ -1,0 +1,86 @@
+<UserControl
+    x:Class="BookstoreManageSystem.Avalonia.VisitorMainView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cs="using:BookstoreManageSystem.Core.Structs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:BookstoreManageSystem.Avalonia.ViewModels"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="vm:VisitorMainViewModel"
+    mc:Ignorable="d">
+    <Design.DataContext>
+        <vm:CustomerMainViewModel>
+            <vm:CustomerMainViewModel.SellBookDatas>
+                <cs:SellBookData BookName="BookName1" ISBN="1234567890123" />
+                <cs:SellBookData BookName="BookName2" ISBN="1234567890123" />
+                <cs:SellBookData BookName="BookName3" ISBN="1234567890123" />
+            </vm:CustomerMainViewModel.SellBookDatas>
+        </vm:CustomerMainViewModel>
+    </Design.DataContext>
+    <UserControl.Styles>
+        <Style Selector="Border.SellBookCard">
+            <Setter Property="Transitions">
+                <Setter.Value>
+                    <Transitions>
+                        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2" />
+                    </Transitions>
+                </Setter.Value>
+            </Setter>
+            <Style Selector="^:pointerover">
+                <Setter Property="RenderTransform" Value="translateY(-4px)" />
+            </Style>
+        </Style>
+    </UserControl.Styles>
+    <UserControl.Resources>
+        <DataTemplate x:Key="SellBookDataTemplate" DataType="cs:SellBookData">
+            <Border
+                Width="200"
+                Height="340"
+                Margin="8"
+                BoxShadow="4 4 8 0 Black"
+                Classes="SellBookCard"
+                CornerRadius="8">
+                <Border ClipToBounds="True" CornerRadius="8">
+                    <Border.Background>
+                        <SolidColorBrush Opacity="0.2" Color="Black" />
+                    </Border.Background>
+                    <Grid RowDefinitions="auto,1*">
+                        <Image Grid.Row="0" Source="avares://BookstoreManageSystem.Avalonia/Assets/LoginPic.png" />
+                        <StackPanel
+                            Grid.Row="1"
+                            Margin="4"
+                            Orientation="Vertical"
+                            Spacing="2">
+                            <TextBlock
+                                FontSize="20"
+                                Text="{Binding BookName}"
+                                TextWrapping="WrapWithOverflow" />
+                            <TextBlock Text="{Binding ISBN}" />
+                            <TextBlock Text="{Binding Author}" />
+                            <TextBlock Text="{Binding Price}" />
+                            <TextBlock Text="{Binding Amount}" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid RowDefinitions="auto,*">
+        <TextBlock
+            Margin="8"
+            FontSize="24"
+            Text="书籍视图" />
+        <Grid Grid.Row="1">
+            <ItemsControl ItemTemplate="{StaticResource SellBookDataTemplate}" ItemsSource="{Binding SellBookDatas, Mode=OneWay}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Margin="8" Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </Grid>
+    </Grid>
+</UserControl>
