@@ -40,12 +40,12 @@ internal sealed partial class MainWindowViewModel : ViewModelBase
     public string? WindowTitle =>
         DataProvider is null
             ? null
-            : $"图书管理系统 - { DataProvider.LoginType switch
+            : $"图书管理系统 - {DataProvider.LoginType switch
             {
                 LoginType.Visitor => "游客",
                 LoginType.Customer => "顾客",
                 LoginType.Employee => "员工",
-                LoginType.Owner => "店长",
+                LoginType.Owner => "店主",
                 _ => null,
             }}";
 }

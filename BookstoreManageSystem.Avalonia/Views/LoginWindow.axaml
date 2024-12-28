@@ -157,16 +157,12 @@
                                 <TextBlock Classes="BoxLabel" Text="密码" />
                                 <TextBox PasswordChar="*" Text="{Binding RegisterPassword}" />
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Button
-                                    HorizontalAlignment="Center"
-                                    Command="{Binding RegisterCustomerAccountCommand}"
-                                    Content="注册账号" />
-                                <TextBlock VerticalAlignment="Center">
-                                    <Run Text="注册账号ID:" />
-                                    <Run Text="{Binding RegisterUID}" />
-                                </TextBlock>
-                            </StackPanel>
+
+                            <Button
+                                HorizontalAlignment="Center"
+                                Command="{Binding RegisterCustomerAccountCommand}"
+                                Content="注册账号" />
+
                         </StackPanel>
                     </TabItem>
                 </TabControl>

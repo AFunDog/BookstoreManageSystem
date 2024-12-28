@@ -5,6 +5,7 @@
     xmlns:cs="using:BookstoreManageSystem.Core.Structs"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sukiUI="using:SukiUI.Controls"
     xmlns:vm="using:BookstoreManageSystem.Avalonia.ViewModels"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -20,7 +21,7 @@
         </vm:CustomerMainViewModel>
     </Design.DataContext>
     <UserControl.Styles>
-        <Style Selector="Border.SellBookCard">
+        <Style Selector=":is(Control).SellBookCard">
             <Setter Property="Transitions">
                 <Setter.Value>
                     <Transitions>
@@ -35,17 +36,13 @@
     </UserControl.Styles>
     <UserControl.Resources>
         <DataTemplate x:Key="SellBookDataTemplate" DataType="cs:SellBookData">
-            <Border
+            <sukiUI:GlassCard
                 Width="200"
                 Height="340"
                 Margin="8"
-                BoxShadow="4 4 8 0 Black"
-                Classes="SellBookCard"
+                Classes="Primary SellBookCard"
                 CornerRadius="8">
                 <Border ClipToBounds="True" CornerRadius="8">
-                    <Border.Background>
-                        <SolidColorBrush Opacity="0.2" Color="Black" />
-                    </Border.Background>
                     <Grid RowDefinitions="auto,1*">
                         <Image Grid.Row="0" Source="avares://BookstoreManageSystem.Avalonia/Assets/LoginPic.png" />
                         <StackPanel
@@ -57,14 +54,26 @@
                                 FontSize="20"
                                 Text="{Binding BookName}"
                                 TextWrapping="WrapWithOverflow" />
-                            <TextBlock Text="{Binding ISBN}" />
-                            <TextBlock Text="{Binding Author}" />
-                            <TextBlock Text="{Binding Price}" />
-                            <TextBlock Text="{Binding Amount}" />
+                            <TextBlock>
+                                <Run Classes="Icons" Text="&#xE82D;" />
+                                <Run Text="{Binding ISBN}" />
+                            </TextBlock>
+                            <TextBlock>
+                                <Run Classes="Icons" Text="&#xF742;" />
+                                <Run Text="{Binding Author}" />
+                            </TextBlock>
+                            <TextBlock>
+                                <Run Text="￥" />
+                                <Run Text="{Binding Price}" />
+                            </TextBlock>
+                            <TextBlock>
+                                <Run Classes="Icons" Text="&#xE81E;" />
+                                <Run Text="{Binding Amount}" />
+                            </TextBlock>
                         </StackPanel>
                     </Grid>
                 </Border>
-            </Border>
+            </sukiUI:GlassCard>
         </DataTemplate>
     </UserControl.Resources>
 

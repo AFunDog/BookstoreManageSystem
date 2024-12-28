@@ -6,11 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Controls.Notifications;
 using BookstoreManageSystem.Core;
 using BookstoreManageSystem.Core.Structs;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Npgsql;
+using SukiUI.Toasts;
 
 namespace BookstoreManageSystem.Avalonia.ViewModels;
 
@@ -55,6 +57,48 @@ internal sealed partial class CustomerMainViewModel : ViewModelBase
     private string _editCustomerEmail = "";
 
     [RelayCommand]
+    private async Task UpdateMyCustomerData()
+    {
+        if (DataProvider is null)
+            return;
+
+        using var cmd = DataProvider.DataSource.CreateCommand(
+            """
+            UPDATE "Customers"
+            SET "Name" = @CustomerName,
+                "Address" = @CustomerAddress,
+                "Phone" = @CustomerPhone,
+                "Email" = @CustomerEmail;
+            """
+        );
+        try
+        {
+            cmd.Parameters.AddWithValue("@CustomerName", EditCustomerName);
+            cmd.Parameters.AddWithValue("@CustomerAddress", EditCustomerAddress);
+            cmd.Parameters.AddWithValue("@CustomerPhone", EditCustomerPhone);
+            cmd.Parameters.AddWithValue("@CustomerEmail", EditCustomerEmail);
+            await cmd.ExecuteNonQueryAsync();
+            await LoadMyCustomerData();
+            App.Instance.SukiToastManager.CreateToast()
+                .WithTitle("更新个人信息成功")
+                .OfType(NotificationType.Success)
+                .Dismiss()
+                .ByClicking()
+                .Queue();
+        }
+        catch (Exception e)
+        {
+            App.Instance.SukiToastManager.CreateToast()
+                .WithTitle("更新个人信息失败")
+                .WithContent(e.Message)
+                .OfType(NotificationType.Error)
+                .Dismiss()
+                .ByClicking()
+                .Queue();
+        }
+    }
+
+    [RelayCommand]
     private async Task BuyBook(int amount)
     {
         if (DataProvider is null)
@@ -69,10 +113,32 @@ internal sealed partial class CustomerMainViewModel : ViewModelBase
         try
         {
             await reader.ReadAsync();
+            App.Instance.SukiToastManager.CreateToast()
+                .WithTitle("购买成功")
+                .WithContent(
+                    $"""
+                    ISBN : {SelectedSellBookData.ISBN} 
+                    数量 : {amount}
+                    总价 : {SelectedSellBookData.Price * amount}
+                    """
+                )
+                .OfType(NotificationType.Success)
+                .Dismiss()
+                .ByClicking()
+                .Dismiss()
+                .After(TimeSpan.FromSeconds(3))
+                .Queue();
         }
         catch (Exception e)
         {
             Debug.WriteLine(e);
+            App.Instance.SukiToastManager.CreateToast()
+                .WithTitle("购买失败")
+                .WithContent(e.Message)
+                .OfType(NotificationType.Error)
+                .Dismiss()
+                .ByClicking()
+                .Queue();
         }
         await LoadDatas();
         //var dealID = reader.GetInt32(0);
@@ -148,5 +214,20 @@ internal sealed partial class CustomerMainViewModel : ViewModelBase
         {
             MyCustomerData = CustomerData.CreateFromReader(reader);
         }
+    }
+
+    //[RelayCommand]
+    //private void EditMyCustomerData()
+    //{
+    //    if (DataProvider is null)
+    //        return;
+    //}
+
+    partial void OnMyCustomerDataChanged(CustomerData value)
+    {
+        EditCustomerName = value.Name;
+        EditCustomerAddress = value.Address;
+        EditCustomerPhone = value.Phone;
+        EditCustomerEmail = value.Email;
     }
 }

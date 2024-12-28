@@ -53,7 +53,10 @@
 
     <Application.Resources>
         <DataTemplate x:Key="BookDataTemplate" DataType="cs:BookData">
-            <sukicontrols:GlassCard Classes="Primary" CornerRadius="8">
+            <sukicontrols:GlassCard
+                Classes="Primary"
+                CornerRadius="8"
+                IsInteractive="True">
                 <sukicontrols:GlassCard.ContextFlyout>
                     <Flyout>
                         <sukicontrols:GlassCard IsOpaque="True">
@@ -157,5 +160,7 @@
                 </TextBlock>
             </sukicontrols:GlassCard>
         </DataTemplate>
+
+
     </Application.Resources>
 </Application>

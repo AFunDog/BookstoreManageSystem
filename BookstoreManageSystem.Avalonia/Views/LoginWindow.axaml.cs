@@ -1,3 +1,4 @@
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -16,8 +17,21 @@ public partial class LoginWindow : SukiUI.Controls.SukiWindow
         InitializeComponent();
         toastHost.Manager = App.Instance.SukiToastManager;
         loginTablControl.SelectionChanged += LoginTabControl_OnSelectionChanged;
-        ViewModel.LoginSucceed += Hide;
-        ViewModel.Logout += Show;
+        ViewModel.LoginSucceed += OnLoginSucceed;
+        ViewModel.Logout += OnLogout;
+    }
+
+    private void OnLogout()
+    {
+        Show();
+        toastHost.Manager = App.Instance.SukiToastManager;
+    }
+
+    private void OnLoginSucceed()
+    {
+        Hide();
+        toastHost.Manager.DismissAll();
+        toastHost.Manager = null;
     }
 
     private void LoginTabControl_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)

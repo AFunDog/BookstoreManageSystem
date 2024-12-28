@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sukiUI="using:SukiUI.Controls"
+    xmlns:sys="using:System"
     xmlns:vm="using:BookstoreManageSystem.Avalonia.ViewModels"
     d:DesignHeight="600"
     d:DesignWidth="1200"
@@ -113,14 +114,44 @@
                         <sukiUI:GlassCard
                             Padding="4"
                             Classes="Accent"
-                            CornerRadius="4">
-                            <TextBlock>
-                                <Run Text="UID" />
-                                <Run Text="{Binding UID}" />
-                                <LineBreak />
-                                <Run Text="Name" />
-                                <Run Text="{Binding Name}" />
-                            </TextBlock>
+                            CornerRadius="4"
+                            IsInteractive="True">
+                            <!--<sukiUI:GlassCard.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="删除用户">
+                                        <MenuItem.Icon>
+                                            <TextBlock
+                                                FontFamily="Segoe Fluent Icons"
+                                                Foreground="Red"
+                                                Text="&#xE74D;" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </sukiUI:GlassCard.ContextMenu>-->
+                            <Grid ColumnDefinitions="auto,*">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontFamily="Segoe Fluent Icons"
+                                    FontSize="24"
+                                    Text="&#xE77B;" />
+                                <TextBlock Grid.Column="1" Margin="8,0,0,0">
+                                    <Run Text="UID" />
+                                    <Run Text="{Binding UID}" />
+                                    <LineBreak />
+                                    <Run Text="姓名" />
+                                    <Run Text="{Binding Name}" />
+                                    <LineBreak />
+                                    <Run Text="手机号" />
+                                    <Run Text="{Binding Phone}" />
+                                    <LineBreak />
+                                    <Run Text="邮箱" />
+                                    <Run Text="{Binding Email}" />
+                                    <LineBreak />
+                                    <Run Text="地址" />
+                                    <Run Text="{Binding Address}" />
+                                </TextBlock>
+
+                            </Grid>
                         </sukiUI:GlassCard>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -131,6 +162,76 @@
             Grid.Column="2"
             Classes="ListLabel"
             Text="员工列表" />
+        <Button
+            Grid.Row="1"
+            Grid.Column="2"
+            Margin="0,0,16,0"
+            HorizontalAlignment="Right"
+            Click="RegisterEmployeeButton_Click"
+            Content="注册员工账号">
+            <Button.ContextFlyout>
+                <Flyout>
+                    <sukiUI:GlassCard IsOpaque="True">
+                        <Grid
+                            Grid.Row="4"
+                            Grid.Column="2"
+                            MinWidth="256"
+                            ColumnDefinitions="auto,*"
+                            RowDefinitions="*,*,*,*">
+
+                            <Grid.Styles>
+                                <Style Selector="TextBlock">
+                                    <Setter Property="Margin" Value="8" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                                <Style />
+                                <Style Selector="TextBox">
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                                </Style>
+                            </Grid.Styles>
+
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Text="员工名称" />
+                            <TextBox
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Text="{Binding RegisterEmployeeName, Mode=TwoWay}" />
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Text="员工月薪" />
+                            <NumericUpDown
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                FormatString="0.00"
+                                Increment="100"
+                                Minimum="0"
+                                Value="{Binding RegisterEmployeeSalary, Mode=TwoWay}" />
+                            <TextBlock
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Text="账号密码" />
+                            <TextBox
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                PasswordChar="*"
+                                Text="{Binding RegisterEmployeePassword, Mode=TwoWay}" />
+                            <Button
+                                Grid.Row="3"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                HorizontalAlignment="Center"
+                                Command="{Binding RegisterEmployeeCommand}"
+                                Content="注册员工账号" />
+                        </Grid>
+                    </sukiUI:GlassCard>
+                </Flyout>
+            </Button.ContextFlyout>
+        </Button>
         <ScrollViewer
             Grid.Row="2"
             Grid.Column="2"
@@ -155,14 +256,49 @@
                         <sukiUI:GlassCard
                             Padding="4"
                             Classes="Accent"
-                            CornerRadius="4">
-                            <TextBlock>
-                                <Run Text="EID" />
-                                <Run Text="{Binding EmployeeID}" />
-                                <LineBreak />
-                                <Run Text="Name" />
-                                <Run Text="{Binding Name}" />
-                            </TextBlock>
+                            CornerRadius="4"
+                            IsInteractive="True"
+                            PointerPressed="EmployeeGlassCard_PointerPressed">
+                            <sukiUI:GlassCard.ContextMenu>
+                                <ContextMenu>
+                                    <StackPanel Orientation="Horizontal" Spacing="16">
+                                        <TextBlock VerticalAlignment="Center" Text="薪水" />
+                                        <NumericUpDown
+                                            Name="editSalaryNumberBox"
+                                            MinWidth="108"
+                                            FormatString="0.00"
+                                            Increment="100"
+                                            Minimum="0"
+                                            Value="{Binding Salary, Mode=OneWay}" />
+                                    </StackPanel>
+                                    <MenuItem
+                                        Click="EditSalaryMenuItem_Click"
+                                        Header="修改薪水"
+                                        Tag="{Binding #editSalaryNumberBox.Value, Mode=OneWay}">
+                                        <MenuItem.Icon>
+                                            <TextBlock FontFamily="Segoe Fluent Icons" Text="&#xE70F;" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </sukiUI:GlassCard.ContextMenu>
+                            <Grid ColumnDefinitions="auto,*">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontFamily="Segoe Fluent Icons"
+                                    FontSize="24"
+                                    Text="&#xEF58;" />
+                                <TextBlock Grid.Column="1" Margin="8,0,0,0">
+                                    <Run Text="EID" />
+                                    <Run Text="{Binding EmployeeID}" />
+                                    <LineBreak />
+                                    <Run Text="姓名" />
+                                    <Run Text="{Binding Name}" />
+                                    <LineBreak />
+                                    <Run Text="薪水" />
+                                    <Run Text="{Binding Salary}" />
+                                </TextBlock>
+
+                            </Grid>
                         </sukiUI:GlassCard>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -227,67 +363,23 @@
             Grid.Row="3"
             Grid.Column="2"
             Classes="ListLabel"
-            Text="注册员工" />
-        <Grid
+            Text="收支统计" />
+        <sukiUI:GlassCard
             Grid.Row="4"
             Grid.Column="2"
-            Margin="8"
-            ColumnDefinitions="auto,*"
-            RowDefinitions="*,*,*,*">
-
-            <Grid.Styles>
-                <Style Selector="TextBlock">
-                    <Setter Property="Margin" Value="8" />
-                    <Setter Property="VerticalAlignment" Value="Center" />
-                </Style>
-                <Style />
-                <Style Selector="TextBox">
-                    <Setter Property="VerticalAlignment" Value="Center" />
-                    <Setter Property="VerticalContentAlignment" Value="Center" />
-                </Style>
-            </Grid.Styles>
-
-            <TextBlock
-                Grid.Row="0"
-                Grid.Column="0"
-                VerticalAlignment="Center"
-                Text="员工名称" />
-            <TextBox
-                Grid.Row="0"
-                Grid.Column="1"
-                Text="{Binding RegisterEmployeeName, Mode=TwoWay}" />
-            <TextBlock
-                Grid.Row="1"
-                Grid.Column="0"
-                Text="员工月薪" />
-            <NumericUpDown
-                Grid.Row="1"
-                Grid.Column="1"
-                FormatString="0.00"
-                Increment="100"
-                Minimum="0"
-                Value="{Binding RegisterEmployeeSalary, Mode=TwoWay}" />
-            <TextBlock
-                Grid.Row="2"
-                Grid.Column="0"
-                Text="账号密码" />
-            <TextBox
-                Grid.Row="2"
-                Grid.Column="1"
-                PasswordChar="*"
-                Text="{Binding RegisterEmployeePassword, Mode=TwoWay}" />
-            <Button
-                Grid.Row="3"
-                Grid.Column="0"
-                Command="{Binding RegisterEmployeeCommand}"
-                Content="注册账号" />
-            <TextBlock
-                Grid.Row="3"
-                Grid.Column="1"
-                IsVisible="{Binding Registered}">
-                <Run Text="注册账号ID:" />
-                <Run Text="{Binding RegisterEmplyeeID}" />
-            </TextBlock>
-        </Grid>
+            Margin="8">
+            <DataGrid
+                AutoGenerateColumns="False"
+                IsReadOnly="True"
+                ItemsSource="{Binding BudgetDatas}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="96"
+                        Binding="{Binding Name}"
+                        Header="项目" />
+                    <DataGridTextColumn Binding="{Binding Budget}" Header="收支" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </sukiUI:GlassCard>
     </Grid>
 </UserControl>

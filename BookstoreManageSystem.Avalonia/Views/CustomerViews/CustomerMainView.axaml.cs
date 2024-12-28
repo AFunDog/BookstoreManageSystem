@@ -1,5 +1,7 @@
+using System;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
@@ -25,6 +27,15 @@ public partial class CustomerMainView : UserControl
         {
             DataContext = new CustomerMainViewModel { DataProvider = pvm.DataProvider };
             _ = ViewModel.LoadDatas();
+            App.Instance.SukiToastManager.CreateToast()
+                .WithTitle("用户登录成功")
+                .WithContent("欢迎使用书店管理系统！")
+                .OfType(NotificationType.Success)
+                .Dismiss()
+                .After(TimeSpan.FromSeconds(3))
+                .Dismiss()
+                .ByClicking()
+                .Queue();
         }
     }
 

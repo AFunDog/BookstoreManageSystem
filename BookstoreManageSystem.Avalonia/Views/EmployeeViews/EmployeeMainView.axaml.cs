@@ -1,10 +1,13 @@
+using System;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using BookstoreManageSystem.Avalonia.ViewModels;
 using BookstoreManageSystem.Core.Structs;
+using SukiUI.Toasts;
 
 namespace BookstoreManageSystem.Avalonia;
 
@@ -25,6 +28,15 @@ public partial class EmployeeMainView : UserControl
             DataContext = new EmployeeMainViewModel { DataProvider = pvm.DataProvider };
             pvm.Refreshed += ViewModel.LoadDatas;
             _ = ViewModel.LoadDatas();
+            App.Instance.SukiToastManager.CreateToast()
+                .WithTitle("员工登录成功")
+                .WithContent("欢迎使用书店管理系统！")
+                .OfType(NotificationType.Success)
+                .Dismiss()
+                .After(TimeSpan.FromSeconds(3))
+                .Dismiss()
+                .ByClicking()
+                .Queue();
         }
     }
 

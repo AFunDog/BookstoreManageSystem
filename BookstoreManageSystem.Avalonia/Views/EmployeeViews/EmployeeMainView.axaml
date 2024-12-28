@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:g="using:System.Globalization"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sukiUI="using:SukiUI.Controls"
     xmlns:vm="using:BookstoreManageSystem.Avalonia.ViewModels"
     d:DesignHeight="600"
     d:DesignWidth="1000"
@@ -45,6 +46,9 @@
                 <cs:StoreData Amount="843278" ISBN="1234567890123" />
             </vm:EmployeeMainViewModel.StoreDatas>
             <vm:EmployeeMainViewModel.GoodsDatas>
+                <cs:GoodsData ISBN="1234567890123" />
+                <cs:GoodsData ISBN="1234567890123" />
+                <cs:GoodsData ISBN="1234567890123" />
                 <cs:GoodsData ISBN="1234567890123" />
                 <cs:GoodsData ISBN="1234567890123" />
                 <cs:GoodsData ISBN="1234567890123" />
@@ -93,60 +97,66 @@
                 Header="上架商品" />
         </ContextMenu>
         <Flyout x:Key="PurchaseBookFlyout">
-            <StackPanel Orientation="Vertical" Spacing="8">
-                <StackPanel
-                    HorizontalAlignment="Stretch"
-                    Orientation="Horizontal"
-                    Spacing="4">
-                    <TextBlock VerticalAlignment="Center" Text="ISBN" />
-                    <TextBox
-                        MinWidth="124"
+            <sukiUI:GlassCard IsOpaque="True">
+
+                <StackPanel Orientation="Vertical" Spacing="8">
+                    <StackPanel
                         HorizontalAlignment="Stretch"
-                        Text="{Binding PurchaseISBN, Mode=TwoWay}" />
+                        Orientation="Horizontal"
+                        Spacing="4">
+                        <TextBlock VerticalAlignment="Center" Text="ISBN" />
+                        <TextBox
+                            MinWidth="124"
+                            HorizontalAlignment="Stretch"
+                            Text="{Binding PurchaseISBN, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <TextBlock VerticalAlignment="Center" Text="数量" />
+                        <NumericUpDown
+                            Name="PurchaseAmountBox"
+                            MinWidth="128"
+                            Increment="1"
+                            Minimum="0"
+                            Value="{Binding PurchaseAmount, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <TextBlock VerticalAlignment="Center" Text="价格" />
+                        <NumericUpDown
+                            Name="PurchasePriceBox"
+                            MinWidth="128"
+                            FormatString="0.00"
+                            Increment="1"
+                            Minimum="0.00"
+                            Value="{Binding PurchasePrice, Mode=TwoWay}">
+                            <NumericUpDown.NumberFormat>
+                                <g:NumberFormatInfo NumberDecimalDigits="2" />
+                            </NumericUpDown.NumberFormat>
+                        </NumericUpDown>
+                    </StackPanel>
+                    <Button Command="{Binding PurchaseBooksCommand}" Content="确认" />
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Spacing="4">
-                    <TextBlock VerticalAlignment="Center" Text="数量" />
-                    <NumericUpDown
-                        Name="PurchaseAmountBox"
-                        MinWidth="128"
-                        Increment="1"
-                        Minimum="0"
-                        Value="{Binding PurchaseAmount, Mode=TwoWay}" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Spacing="4">
-                    <TextBlock VerticalAlignment="Center" Text="价格" />
-                    <NumericUpDown
-                        Name="PurchasePriceBox"
-                        MinWidth="128"
-                        FormatString="0.00"
-                        Increment="1"
-                        Minimum="0.00"
-                        Value="{Binding PurchasePrice, Mode=TwoWay}">
-                        <NumericUpDown.NumberFormat>
-                            <g:NumberFormatInfo NumberDecimalDigits="2" />
-                        </NumericUpDown.NumberFormat>
-                    </NumericUpDown>
-                </StackPanel>
-                <Button Command="{Binding PurchaseBooksCommand}" Content="确认" />
-            </StackPanel>
+            </sukiUI:GlassCard>
         </Flyout>
         <Flyout x:Key="EditBookDataFlyout">
-            <StackPanel
-                Width="196"
-                Orientation="Vertical"
-                Spacing="8">
-                <TextBlock Text="ISBN" />
-                <TextBox Text="{Binding RegisterISBN, Mode=TwoWay}" />
-                <TextBlock Text="书籍名称" />
-                <TextBox Text="{Binding RegisterBookName, Mode=TwoWay}" />
-                <TextBlock Text="作者" />
-                <TextBox Text="{Binding RegisterAuthor, Mode=TwoWay}" />
-                <TextBlock Text="出版社" />
-                <TextBox Text="{Binding RegisterPublisher, Mode=TwoWay}" />
-                <TextBlock Text="介绍" />
-                <TextBox Text="{Binding RegisterIntroduction, Mode=TwoWay}" />
-                <Button Command="{Binding AddBookCommand}" Content="注册书籍" />
-            </StackPanel>
+            <sukiUI:GlassCard IsOpaque="True">
+                <StackPanel
+                    Width="196"
+                    Orientation="Vertical"
+                    Spacing="8">
+                    <TextBlock Text="ISBN" />
+                    <TextBox Text="{Binding RegisterISBN, Mode=TwoWay}" />
+                    <TextBlock Text="书籍名称" />
+                    <TextBox Text="{Binding RegisterBookName, Mode=TwoWay}" />
+                    <TextBlock Text="作者" />
+                    <TextBox Text="{Binding RegisterAuthor, Mode=TwoWay}" />
+                    <TextBlock Text="出版社" />
+                    <TextBox Text="{Binding RegisterPublisher, Mode=TwoWay}" />
+                    <TextBlock Text="介绍" />
+                    <TextBox Text="{Binding RegisterIntroduction, Mode=TwoWay}" />
+                    <Button Command="{Binding AddBookCommand}" Content="注册书籍" />
+                </StackPanel>
+
+            </sukiUI:GlassCard>
         </Flyout>
     </UserControl.Resources>
     <UserControl.Styles>
@@ -174,7 +184,7 @@
     </UserControl.Styles>
     <Grid
         Margin="16"
-        ColumnDefinitions="*,*,*"
+        ColumnDefinitions="*,8,*,8,*"
         RowDefinitions="auto,*,auto,*,auto">
         <TextBlock>
             <Run FontSize="24" Text="书籍列表" />
@@ -200,13 +210,20 @@
         </ScrollViewer>
         <TextBlock
             Grid.Row="0"
-            Grid.Column="1"
+            Grid.Column="2"
             Margin="0,0,0,4">
             <Run FontSize="24" Text="库存列表" />
-            <LineBreak />
-            <Run FontSize="20" Text="ISBN - 剩余数量" />
+            <!--<LineBreak />
+            <Run FontSize="20" Text="ISBN - 剩余数量" />-->
         </TextBlock>
-        <ScrollViewer
+        <DataGrid
+            Grid.Row="1"
+            Grid.Column="2"
+            AutoGenerateColumns="True"
+            IsReadOnly="True"
+            IsScrollInertiaEnabled="True"
+            ItemsSource="{Binding StoreDatas}" />
+        <!--<ScrollViewer
             Grid.Row="1"
             Grid.Column="1"
             Margin="4"
@@ -229,59 +246,39 @@
                                 <Run FontWeight="Bold" Text="{Binding ISBN}" />
                                 <Run Text=" - " />
                                 <Run FontWeight="Bold" Text="{Binding Amount}">
-                                    <!--<Run.Foreground>
+        -->
+        <!--<Run.Foreground>
                                         <SolidColorBrush Opacity="0.8" Color="DarkOrange" />
                                     </Run.Foreground>-->
+        <!--
                                 </Run>
                             </TextBlock>
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </ScrollViewer>
-        <TextBlock Grid.Row="2" Grid.Column="1">
+        </ScrollViewer>-->
+        <TextBlock Grid.Row="2" Grid.Column="2">
             <Run FontSize="24" Text="已上架的商品列表" />
-            <LineBreak />
-            <Run FontSize="20" Text="ISBN - 数量" />
+            <!--<LineBreak />
+            <Run FontSize="20" Text="ISBN - 数量" />-->
         </TextBlock>
-        <ScrollViewer
+        <DataGrid
             Grid.Row="3"
-            Grid.Column="1"
-            Margin="4"
-            HorizontalScrollBarVisibility="Disabled">
-            <ItemsControl Margin="0,0,16,0" ItemsSource="{Binding GoodsDatas}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Spacing="4" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="cs:GoodsData">
-                        <Border
-                            Padding="4"
-                            Classes="StoreDataCard"
-                            CornerRadius="4"
-                            PointerPressed="StoreDataCard_PointerPressed">
-                            <TextBlock>
-                                <Run FontWeight="Bold" Text="{Binding ISBN}" />
-                                <Run Text=" - " />
-                                <Run FontWeight="Bold" Text="{Binding Amount}">
-                                    <!--<Run.Foreground>
-                                        <SolidColorBrush Opacity="0.8" Color="DarkOrange" />
-                                    </Run.Foreground>-->
-                                </Run>
-                            </TextBlock>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+            Grid.Column="2"
+            AutoGenerateColumns="True"
+            IsReadOnly="True"
+            IsScrollInertiaEnabled="True"
+            ItemsSource="{Binding GoodsDatas}" />
+        <!--<ScrollViewer Margin="4" HorizontalScrollBarVisibility="Disabled">
+
+        </ScrollViewer>-->
         <TextBlock
             Grid.Row="0"
-            Grid.Column="2"
+            Grid.Column="4"
             FontSize="24"
             Text="采购交易记录" />
-        <ScrollViewer Grid.Row="1" Grid.Column="2">
+        <ScrollViewer Grid.Row="1" Grid.Column="4">
             <ItemsControl ItemTemplate="{StaticResource PurchaseDealDataTemplate}" ItemsSource="{Binding PurchaseDealDatas}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -292,10 +289,10 @@
         </ScrollViewer>
         <TextBlock
             Grid.Row="2"
-            Grid.Column="2"
+            Grid.Column="4"
             FontSize="24"
             Text="售出交易记录" />
-        <ScrollViewer Grid.Row="3" Grid.Column="2">
+        <ScrollViewer Grid.Row="3" Grid.Column="4">
             <ItemsControl ItemTemplate="{StaticResource SellDealDataTemplate}" ItemsSource="{Binding SellDealDatas}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

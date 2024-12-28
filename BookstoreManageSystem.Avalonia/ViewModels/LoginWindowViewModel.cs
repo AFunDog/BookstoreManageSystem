@@ -36,8 +36,8 @@ internal sealed partial class LoginWindowViewModel : ViewModelBase
     [ObservableProperty]
     private string _registerPassword = "";
 
-    [ObservableProperty]
-    private int _registerUID = -1;
+    //[ObservableProperty]
+    //private int _registerUID = -1;
 
     internal event Action? LoginSucceed;
     internal event Action? LoginFailed;
@@ -89,9 +89,29 @@ internal sealed partial class LoginWindowViewModel : ViewModelBase
             cmd.Parameters.AddWithValue("@Phone", RegisterPhone);
             cmd.Parameters.AddWithValue("@Email", RegisterEmail);
             cmd.Parameters.AddWithValue("@Password", RegisterPassword);
-            using var reader = await cmd.ExecuteReaderAsync();
-            await reader.ReadAsync();
-            RegisterUID = reader.GetInt32(0);
+            try
+            {
+                using var reader = await cmd.ExecuteReaderAsync();
+                await reader.ReadAsync();
+                var registerUID = reader.GetInt32(0);
+                App.Instance.SukiToastManager.CreateToast()
+                    .OfType(NotificationType.Success)
+                    .WithTitle("注册成功")
+                    .WithContent($"UID: {registerUID}")
+                    .Dismiss()
+                    .ByClicking()
+                    .Queue();
+            }
+            catch (Exception e)
+            {
+                App.Instance.SukiToastManager.CreateToast()
+                    .OfType(NotificationType.Error)
+                    .WithTitle("注册失败")
+                    .WithContent(e.Message)
+                    .Dismiss()
+                    .ByClicking()
+                    .Queue();
+            }
         }
     }
 

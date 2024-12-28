@@ -7,10 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Controls.Notifications;
 using BookstoreManageSystem.Core;
 using BookstoreManageSystem.Core.Structs;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using SukiUI.Toasts;
 
 namespace BookstoreManageSystem.Avalonia.ViewModels;
 
@@ -88,10 +90,31 @@ internal sealed partial class EmployeeMainViewModel : ViewModelBase
         {
             await cmd.ExecuteNonQueryAsync();
             await LoadDatas();
+            App.Instance.SukiToastManager.CreateToast()
+                .OfType(NotificationType.Success)
+                .WithTitle("添加书籍成功")
+                .WithContent(
+                    $"""
+                    ISBN : {RegisterISBN}
+                    书名 : {RegisterBookName}
+                    """
+                )
+                .Dismiss()
+                .After(TimeSpan.FromSeconds(3))
+                .Dismiss()
+                .ByClicking()
+                .Queue();
         }
         catch (Exception e)
         {
             Debug.WriteLine(e);
+            App.Instance.SukiToastManager.CreateToast()
+                .OfType(NotificationType.Error)
+                .WithTitle("添加书籍失败")
+                .WithContent(e.Message)
+                .Dismiss()
+                .ByClicking()
+                .Queue();
         }
     }
 
@@ -107,9 +130,38 @@ internal sealed partial class EmployeeMainViewModel : ViewModelBase
         cmd.Parameters.AddWithValue("@ISBN", SelectedStoreData.ISBN);
         cmd.Parameters.AddWithValue("@Amount", AddAmount);
         cmd.Parameters.AddWithValue("@Price", AddPrice);
-        using var reader = await cmd.ExecuteReaderAsync();
-        await reader.ReadAsync();
-        await LoadDatas();
+        try
+        {
+            using var reader = await cmd.ExecuteReaderAsync();
+            var goodsId = await reader.ReadAsync();
+
+            App.Instance.SukiToastManager.CreateToast()
+                .OfType(NotificationType.Success)
+                .WithTitle("上架商品成功")
+                .WithContent(
+                    $"""
+                    GoodsId : {goodsId}
+                    ISBN : {SelectedStoreData.ISBN}
+                    """
+                )
+                .Dismiss()
+                .After(TimeSpan.FromSeconds(3))
+                .Dismiss()
+                .ByClicking()
+                .Queue();
+
+            await LoadDatas();
+        }
+        catch (Exception e)
+        {
+            App.Instance.SukiToastManager.CreateToast()
+                .OfType(NotificationType.Error)
+                .WithTitle("上架商品失败")
+                .WithContent(e.Message)
+                .Dismiss()
+                .ByClicking()
+                .Queue();
+        }
     }
 
     [RelayCommand]
@@ -123,9 +175,39 @@ internal sealed partial class EmployeeMainViewModel : ViewModelBase
         cmd.Parameters.AddWithValue("@ISBN", PurchaseISBN);
         cmd.Parameters.AddWithValue("@Amount", PurchaseAmount);
         cmd.Parameters.AddWithValue("@Price", PurchasePrice);
-        using var reader = await cmd.ExecuteReaderAsync();
-        await reader.ReadAsync();
-        await LoadDatas();
+        try
+        {
+            using var reader = await cmd.ExecuteReaderAsync();
+            var purchaseDealId = await reader.ReadAsync();
+
+            App.Instance.SukiToastManager.CreateToast()
+                .OfType(NotificationType.Success)
+                .WithTitle("采购记录成功")
+                .WithContent(
+                    $"""
+                    PurchaseDealId : {purchaseDealId}
+                    ISBN : {PurchaseISBN}
+                    """
+                )
+                .Dismiss()
+                .After(TimeSpan.FromSeconds(3))
+                .Dismiss()
+                .ByClicking()
+                .Queue();
+
+            await LoadDatas();
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e);
+            App.Instance.SukiToastManager.CreateToast()
+                .OfType(NotificationType.Error)
+                .WithTitle("采购记录失败")
+                .WithContent(e.Message)
+                .Dismiss()
+                .ByClicking()
+                .Queue();
+        }
     }
 
     public async Task LoadDatas()
